@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 네임스페이스에 DAO 풀패키지명을 작성 -->
+<mapper namespace="com.ssafit.movie.dao.MovieDao">
+	<!-- 전체 게시글 조회 -->
+	<select id="selectAll" resultType="Movie">
+		SELECT * FROM movies;
+	</select>
+
+	<!-- 조회수 순으로 게시글 조회 -->
+	<select id="sortedAll" resultType="Movie">
+		SELECT * FROM movies ORDER BY
+		view_cnt DESC;
+	</select>
+
+	<!-- 특정 영상 게시글 선택 -->
+	<select id="searchMovie" resultType="Movie" parameterType="int">
+		SELECT * FROM movies WHERE id = #{id}
+	</select>
+
+	<!-- 조회수 증가 -->
+	<update id="updateViewCnt" parameterType="int">
+		UPDATE movies
+		SET
+		view_cnt = view_cnt+1
+		WHERE id = #{id};
+	</update>
+
+	<!-- category가 같은 영상 정보들을 가져오는 쿼리 -->
+	<select id="sectionAll" resultType="Movie"
+		parameterType="String">
+		SELECT * FROM movies WHERE category = #{category};
+	</select>
+
+	<!-- 영상 조회수가 가장 높은 영상들 정보를 가져오는 쿼리 -->
+	<select id="selectionBest" resultType="Movie">
+		SELECT *
+		FROM movies
+		WHERE view_cnt = (
+        SELECT MAX(view_cnt)
+        FROM movies
+    );
+	</select>
+
+
+</mapper>
